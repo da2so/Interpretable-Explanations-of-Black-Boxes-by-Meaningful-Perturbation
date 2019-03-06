@@ -45,10 +45,12 @@ class Optimize():
     def upsample(self,img):
         if cuda_available():
             upsample=F.interpolate(img,size=(self.original_img.size(2), \
-                                    self.original_img.size(3)),mode='bilinear').cuda()
+                                    self.original_img.size(3)),mode='bilinear'\
+                                   ,align_corners=False).cuda()
         else:
             upsample = F.interpolate(img, size=(self.original_img.size(2), \
-                                                self.original_img.size(3)),mode='bilinear')
+                                    self.original_img.size(3)),mode='bilinear'\
+                                     ,align_corners=False)
         return upsample
     def build(self):
 
@@ -72,7 +74,7 @@ class Optimize():
             mask_img=torch.mul(upsampled_mask,self.original_img)+torch.mul((1-upsampled_mask),\
                                                                           self.perturbed_img)
 
-            mask_output=torch.nn.Softmax()(self.model(mask_img))
+            mask_output=torch.nn.Softmax(dim=1)(self.model(mask_img))
             mask_prob =mask_output[0,class_index]
 
             loss=self.l1_coeff*torch.mean(1-torch.abs(mask))+\

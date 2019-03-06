@@ -45,12 +45,7 @@ def image_preprocessing(img):
         img=preprocess(img).cuda()
     else:
         img=preprocess(img)
-    """
-    img=img.view(224,224,3).data.cpu().numpy()
-    cv2.imshow('img',img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    """
+
     img.unsqueeze_(0)
 
     return img
