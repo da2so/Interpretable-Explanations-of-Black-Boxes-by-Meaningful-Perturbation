@@ -7,7 +7,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', type=str, default='vgg19', help='Choose a model')
     parser.add_argument('--tv_coeff',type=float, default='10e-2',help='Coefficient of TV')
     parser.add_argument('--tv_beta',type=float, default='3',help='TV beta value')
-    parser.add_argument('--l1_coeff',type=float,default='10e-1',help='L1 regularization')
+    parser.add_argument('--l1_coeff',type=float,default='10e-3',help='L1 regularization')
     parser.add_argument('--factor',type=int,default=8,help='Factor to upsampling')
     parser.add_argument('--lr',type=float,default=0.1,help='Learning rate')
     parser.add_argument('--iter',type=int,default=300,help='iteration')
