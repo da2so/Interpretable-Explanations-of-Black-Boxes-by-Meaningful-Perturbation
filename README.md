@@ -1,4 +1,4 @@
-# Interpretable-Explanations-of-Black-Boxes-by-Meaningful-Perturbation
+# Interpretable Explanations of Black Boxes by Meaningful Perturbation
 
 ![fig1](./assets/fig1.png)
 
