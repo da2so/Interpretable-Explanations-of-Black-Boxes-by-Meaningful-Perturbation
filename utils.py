@@ -1,22 +1,50 @@
-import torchvision.models as models
+import os
+import sys
+
 import cv2
-import  numpy as np
+import numpy as np
+from PIL import Image,ImageFilter
+
+import torchvision.models as models
 from torchvision import models, transforms, utils
 from torch.autograd import Variable
-from PIL import Image,ImageFilter
 import torch
 from torch.nn import functional as F
-import os
 
-def load_model():
-    model = models.vgg19(pretrained=True)
+def load_model(model_path):
+    #for saved model (.pt)
+    if '.pt' in model_path:
+        if torch.typename(torch.load(model_path)) == 'OrderedDict':
 
+            model=Net()
+            model.load_state_dict(torch.load(model_path))
+
+        else:
+            model=torch.load(model_path)
+
+    #for pretrained model (ImageNet)
+    elif model_path=='AlexNet':
+        model = models.alexnet(pretrained=True)
+    elif model_path=='VGG19':
+        model = models.vgg19(pretrained=True)
+    elif model_path=='ResNet50':
+        model = models.resnet50(pretrained=True)
+    elif model_path=='DenseNet169':
+        model = models.densenet169(pretrained=True)
+    elif model_path=='MobileNet':
+        model  = models.mobilenet_v2(pretrained=True)
+    elif model_path=='WideResNet50':
+        model = models.wide_resnet50_2(pretrained=True)
+    else:
+        print('Choose an available model')
+        sys.exit()
+        
+
+    model.eval()
     if cuda_available():
         model.cuda()
 
-    model.eval()
-    return  model
-
+    return model
 
 def cuda_available():
     use_cuda = torch.cuda.is_available()
@@ -48,7 +76,7 @@ def image_preprocessing(img):
 
     img.unsqueeze_(0)
 
-    return img
+    return Variable(img, requires_grad=False)
 
 def numpy_to_torch(img, requires_grad=True):
     if len(img.shape) < 3:
@@ -61,11 +89,10 @@ def numpy_to_torch(img, requires_grad=True):
         output = output.cuda()
 
     output.unsqueeze_(0)
-    v = Variable(output, requires_grad=requires_grad)
-    return v
+    return Variable(output, requires_grad=requires_grad)
 
 
-def save(mask, img, blurred, path):
+def save(mask, img, blurred, img_path,model_path):
     img=np.asarray(img)
     img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, (224, 224))
@@ -93,9 +120,9 @@ def save(mask, img, blurred, path):
     # img = np.float32(img) / 255
     perturbated = np.multiply(1 - mask, img) + np.multiply(mask, blurred)
 
-    index = path.find('/')
-    index2 = path.find('.')
-    path = 'result/' + path[index + 1:index2]
+    index = img_path.find('/')
+    index2 = img_path.find('.')
+    path = 'result/' + img_path[index + 1:index2] +'/'+model_path
 
     if not (os.path.isdir(path)):
         os.makedirs(path)

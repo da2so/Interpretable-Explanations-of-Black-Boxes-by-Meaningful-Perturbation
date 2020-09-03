@@ -1,10 +1,12 @@
 import argparse
-from optimize import *
+from optimize import Optimize
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Meaningful Perturbation')
+    parser = argparse.ArgumentParser(description='Meaningful Perturbation PyTorch')
     parser.add_argument('--img_path', type=str, default='examples/tusker.jpg', help='Image path')
-    parser.add_argument('--model', type=str, default='vgg19', help='Choose a model')
+    #Pretrained model list:{'AlexNet', 'VGG19', 'ResNet50', 'DenseNet169', 'MobileNet' ,'WideResNet50'}
+    parser.add_argument('--model_path', type=str, default='VGG19', help='Choose a pretrained model or saved model (.pt)')
+    parser.add_argument('--perturb', type=str, default='blur', help='Choose a perturbation method (blur, noise)')
     parser.add_argument('--tv_coeff',type=float, default='10e-2',help='Coefficient of TV')
     parser.add_argument('--tv_beta',type=float, default='3',help='TV beta value')
     parser.add_argument('--l1_coeff',type=float,default='10e-3',help='L1 regularization')
@@ -13,19 +15,9 @@ if __name__ == "__main__":
     parser.add_argument('--iter',type=int,default=300,help='iteration')
 
     args = parser.parse_args()
+    mask_opt=Optimize(args.model_path,args.factor,args.iter,args.lr,\
+                      args.tv_coeff,args.tv_beta,args.l1_coeff,args.img_path,args.perturb,)
+    mask_opt.build()
 
-    model=load_model()
-
-    original_img=perturbation(args.img_path,'original',None)
-    original_img_tensor=image_preprocessing(original_img)
-
-    perturbed_img=perturbation(args.img_path,'blur',5)
-    perturbed_img_tensor=image_preprocessing(perturbed_img)
-
-    mask_Opt=Optimize(model,original_img_tensor,perturbed_img_tensor,args.factor,args.iter,args.lr,\
-                      args.tv_coeff,args.tv_beta,args.l1_coeff,args.img_path)
-    gen_mask=mask_Opt.build()
-
-    save(gen_mask,original_img,perturbed_img,args.img_path)
 
 
