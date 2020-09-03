@@ -31,7 +31,7 @@ Arguments:
 - `iter` - Iteration
 
 
-## Understanding GradCAM
+## Understanding this Method (Algorithm)!
 
 Check my blog!!
 [Meaningful_Perturbation in da2so](https://da2so.github.io/2020-08-11-Meaningful_Perturbation/)
