@@ -1,6 +1,6 @@
 # Interpretable-Explanations-of-Black-Boxes-by-Meaningful-Perturbation
 
-![fig1](./assets/fig.pnh)
+![fig1](./assets/fig1.png)
 
 
 ## Requirements
