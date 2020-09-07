@@ -12,7 +12,7 @@ if __name__ == "__main__":
     parser.add_argument('--l1_coeff',type=float,default='10e-3',help='L1 regularization')
     parser.add_argument('--factor',type=int,default=8,help='Factor to upsampling')
     parser.add_argument('--lr',type=float,default=0.1,help='Learning rate')
-    parser.add_argument('--iter',type=int,default=300,help='iteration')
+    parser.add_argument('--iter',type=int,default=300,help='Iteration number')
 
     args = parser.parse_args()
     mask_opt=Optimize(args.model_path,args.factor,args.iter,args.lr,\
