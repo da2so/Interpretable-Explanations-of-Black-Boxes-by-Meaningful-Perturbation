@@ -37,10 +37,11 @@ Arguments:
 If you want to use customized model that has a type 'OrderedDict', you shoud type a code that loads model object.
 
 Search 'load model' function in utils.py and type a code such as:
-'''
+
+```shell
 from yourNetwork import yourNetwork())
 model=yourNetwork()
-''''
+```
 
 ## Understanding this Method (Algorithm)!
 
