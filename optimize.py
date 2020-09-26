@@ -1,5 +1,11 @@
-from utils import *
-from tqdm import tqdm
+from PIL import Image,ImageFilter
+import numpy as np
+
+import torch
+from torch.nn import functional as F
+from torch.autograd import Variable
+
+from utils import load_model, cuda_available, save_img ,image_preprocessing
 
 def perturbation(img_path ,method,radius):
     img=Image.open(img_path).convert('RGB')
@@ -42,6 +48,7 @@ class Optimize():
         self.original_img=perturbation(self.img_path,'original',None)
         self.original_img_tensor=image_preprocessing(self.original_img)
 
+
         self.perturbed_img=perturbation(self.img_path,perturb,5)
         self.perturbed_img_tensor=image_preprocessing(self.perturbed_img)
 
@@ -60,10 +67,12 @@ class Optimize():
     def build(self):
         
         #mask initialization
-        mask=np.random.rand(int(self.original_img_tensor.size(2)/self.factor),\
-                                  int(self.original_img_tensor.size(3)/self.factor))
+        b,c,w,h=self.original_img_tensor.shape
+        mask_tensor=torch.rand((b,1,int(w/self.factor),int(h/self.factor)))
 
-        mask_tensor=numpy_to_torch(mask, True)
+        if cuda_available():
+            mask_tensor = mask_tensor.cuda()
+        mask_tensor=Variable(mask_tensor, requires_grad=True)
 
         output=self.model(self.original_img_tensor)
         #target class for explanations
@@ -71,12 +80,15 @@ class Optimize():
 
         optimizer=torch.optim.Adam([mask_tensor],self.lr)
 
-        for i in tqdm(range(self.iter)):
+        for i in range(self.iter+1):
             #upsampling mask to fit the shape of mask to the shape of image
             upsampled_mask = self.upsample(mask_tensor)
 
+            #gjttering
+            jitter=torch.randn((b,c,w,h))*0.03
+            jitter_org_img_tensor=self.original_img_tensor+jitter.cuda()
 
-            mask_img=torch.mul(upsampled_mask,self.original_img_tensor)+torch.mul((1-upsampled_mask),\
+            mask_img=torch.mul(upsampled_mask,jitter_org_img_tensor)+torch.mul((1-upsampled_mask),\
                                                                           self.perturbed_img_tensor)
 
             mask_output=torch.nn.Softmax(dim=1)(self.model(mask_img))
@@ -92,6 +104,7 @@ class Optimize():
             #allow the values of mask to be [0,1]
             mask_tensor.data.clamp_(0, 1)
 
-        gen_mask=self.upsample(mask_tensor)
+            if i% 20 == 0:
+                print(f'[{i}/{self.iter}] Loss: {loss}  Prob for the target class: {mask_prob}')
 
-        save(gen_mask,self.original_img,self.perturbed_img,self.img_path,self.model_path)
+        save_img(self.upsample(mask_tensor),self.original_img,self.perturbed_img,self.img_path,self.model_path)

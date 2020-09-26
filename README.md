@@ -14,6 +14,8 @@
 
 ## Running the code
 
+This code is baesed on ImageNet dataset
+
 ```shell
 python main.py --model_path=VGG19 --img_path=examples/catdog.png
 ```
@@ -30,6 +32,15 @@ Arguments:
 - `lr` - Learning rate
 - `iter` - Iteration
 
+### How to use your customized model
+
+If you want to use customized model that has a type 'OrderedDict', you shoud type a code that loads model object.
+
+Search 'load model' function in utils.py and type a code such as:
+'''
+from yourNetwork import yourNetwork())
+model=yourNetwork()
+''''
 
 ## Understanding this Method (Algorithm)!
 

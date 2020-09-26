@@ -3,20 +3,23 @@ import sys
 
 import cv2
 import numpy as np
-from PIL import Image,ImageFilter
 
 import torchvision.models as models
 from torchvision import models, transforms, utils
 from torch.autograd import Variable
 import torch
-from torch.nn import functional as F
+
 
 def load_model(model_path):
     #for saved model (.pt)
     if '.pt' in model_path:
         if torch.typename(torch.load(model_path)) == 'OrderedDict':
-
-            model=Net()
+            
+            #if you want to use customized model that has a type 'OrderedDict',
+            #you shoud load model object as follows:
+            
+            #from Net import Net()
+            #model=Net()
             model.load_state_dict(torch.load(model_path))
 
         else:
@@ -50,11 +53,6 @@ def cuda_available():
     use_cuda = torch.cuda.is_available()
     return use_cuda
 
-def load_image(path):
-    img = cv2.imread(path, 1)
-    img = np.float32(img) / 255
-
-    return img
 
 def image_preprocessing(img):
 
@@ -78,21 +76,8 @@ def image_preprocessing(img):
 
     return Variable(img, requires_grad=False)
 
-def numpy_to_torch(img, requires_grad=True):
-    if len(img.shape) < 3:
-        output = np.float32([img])
-    else:
-        output = np.transpose(img, (2, 0, 1))
 
-    output = torch.from_numpy(output)
-    if cuda_available():
-        output = output.cuda()
-
-    output.unsqueeze_(0)
-    return Variable(output, requires_grad=requires_grad)
-
-
-def save(mask, img, blurred, img_path,model_path):
+def save_img(mask, img, blurred, img_path,model_path):
     img=np.asarray(img)
     img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, (224, 224))
