@@ -1,13 +1,12 @@
 # Interpretable Explanations of Black Boxes by Meaningful Perturbation
 
-![fig1](./assets/fig1.png)
-
 
 ![Python version support](https://img.shields.io/badge/python-3.6-blue.svg)
 ![PyTorch version support](https://img.shields.io/badge/PyTorch-1.7.0-red.svg)
 
 :star: Star us on GitHub — it helps!!
 
+![fig1](./assets/fig1.png)
 
 PyTorch implementation for *[Interpretable Explanations of Black Boxes by Meaningful Perturbation](https://arxiv.org/abs/1704.03296)*
 
