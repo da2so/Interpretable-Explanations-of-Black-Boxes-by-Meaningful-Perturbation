@@ -5,8 +5,7 @@ from optimize import Optimize
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Meaningful Perturbation PyTorch')
-    parser.add_argument('--img_path', type=str, default='examples/flute.jpg', help='Image path')
-    #Pretrained model list:{'AlexNet', 'VGG19', 'ResNet50', 'DenseNet169', 'MobileNet' ,'WideResNet50'}
+    parser.add_argument('--img_path', type=str, default='examples/catdog.jpg', help='Image path')
     parser.add_argument('--model_path', type=str, default='MobileNet', help='Choose a pretrained model or saved model (.pt)')
     parser.add_argument('--perturb', type=str, default='blur', help='Choose a perturbation method (blur, noise)')
     parser.add_argument('--tv_coeff',type=float, default='10e-2',help='Coefficient of TV')

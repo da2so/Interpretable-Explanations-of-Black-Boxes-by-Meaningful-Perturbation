@@ -26,18 +26,8 @@ def load_model(model_path):
             model=torch.load(model_path)
 
     #for pretrained model (ImageNet)
-    elif model_path=='AlexNet':
-        model = models.alexnet(pretrained=True)
-    elif model_path=='VGG19':
-        model = models.vgg19(pretrained=True)
-    elif model_path=='ResNet50':
-        model = models.resnet50(pretrained=True)
-    elif model_path=='DenseNet169':
-        model = models.densenet169(pretrained=True)
-    elif model_path=='MobileNet':
-        model  = models.mobilenet_v2(pretrained=True)
-    elif model_path=='WideResNet50':
-        model = models.wide_resnet50_2(pretrained=True)
+    elif hasattr(models , model_path):
+        model = getattr(models,model_path)(pretrained=True)
     else:
         print('Choose an available model')
         sys.exit()

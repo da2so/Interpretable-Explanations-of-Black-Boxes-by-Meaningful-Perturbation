@@ -3,26 +3,35 @@
 ![fig1](./assets/fig1.png)
 
 
-## Requirements
+![Python version support](https://img.shields.io/badge/python-3.6-blue.svg)
+![PyTorch version support](https://img.shields.io/badge/PyTorch-1.7.0-red.svg)
 
-- Pytorch 1.14 
-- Python 3.6
-- cv2 4.4.0
-- matplotlib 3.3.1
-- CUDA 10.1 (optional)
+:star: Star us on GitHub — it helps!!
 
 
-## Running the code
+PyTorch implementation for *[Interpretable Explanations of Black Boxes by Meaningful Perturbation](https://arxiv.org/abs/1704.03296)*
 
-This code is baesed on ImageNet dataset
+## Install
+
+You will need a machine with a GPU and CUDA installed.  
+Then, you prepare runtime environment:
+
+   ```shell
+   pip install -r requirements.txt
+   ```
+
+## Use
+
+This codes are baesed on ImageNet dataset
 
 ```shell
-python main.py --model_path=VGG19 --img_path=examples/catdog.png
+python main.py --model_path=vgg19 --img_path=examples/catdog.png
 ```
 
 Arguments:
 
-- `model_path` - Choose a pretrained model (AlexNet, VGG19, ResNet50, DenseNet169, MobileNet...) or saved model (.pt) 
+- `model_path` - Choose a pretrained model in torchvision.models or saved model (.pt)
+	- Examples of available list: ['alexnet', 'vgg19', 'resnet50', 'densenet169', 'mobilenet_v2' ,'wide_resnet50_2', ...]
 - `img_path` - Image Path
 - `perturb` - Choose a perturbation method (blur, noise)
 - `tv_coeff` - Coefficient of TV
@@ -43,7 +52,7 @@ from yourNetwork import yourNetwork())
 model=yourNetwork()
 ```
 
-## Understanding this Method (Algorithm)!
+## Understanding this Paper!
 
-Check my blog!!
-[Meaningful_Perturbation in da2so](https://da2so.github.io/2020-08-11-Meaningful_Perturbation/)
+:white_check_mark: Check my blog!!
+[Here](https://da2so.github.io/2020-08-11-Meaningful_Perturbation/)
